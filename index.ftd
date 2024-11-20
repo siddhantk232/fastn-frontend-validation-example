@@ -1,0 +1,57 @@
+;; <your-package-name>/assets
+-- import: frontend-validation-example/assets
+
+-- ftd.string-field $name-field: name
+
+-- ftd.string-field $email-field: email
+value: default@example.com
+
+-- ftd.text-input:
+placeholder: Enter your name
+padding.px: 4
+border-width.px: 1
+$on-input$: $ftd.set-string($a = $name-field.value, v = $VALUE)
+
+
+-- ftd.text-input:
+placeholder: your email
+$on-input$: $ftd.set-string($a = $email-field.value, v = $VALUE)
+value: $email-field.value ;; the default value we're showing to the user
+border-width.px: 1
+padding.px: 4
+
+
+;; These error messages will be sent to us from the server if the user input is
+;; bad.
+;; The server has to send a json like:
+;; 
+;; {
+;;     "errors": {
+;;         "email": "Invalid email. The email must contain an '@'"
+;;     }
+;; }
+;; 
+;; `name-field.error` is populated with server sent errors
+-- ftd.text: $name-field.error
+color: red
+if: { name-field.error }
+
+-- ftd.text: $email-field.error
+color: red
+if: { email-field.error }
+
+
+-- ftd.text: Submit
+border-width.px: 1
+padding-horizontal.px: 4
+padding-vertical.px: 8
+background.solid: cyan
+$on-click$: $handle(name = $name-field, email = $email-field)
+
+
+-- void handle(name, email):
+ftd.string-field name:
+ftd.string-field email:
+js: $assets.files.index.js
+
+validate(name, email)
