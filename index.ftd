@@ -10,12 +10,12 @@ value: default@example.com
 placeholder: Enter your name
 padding.px: 4
 border-width.px: 1
-$on-input$: $ftd.set-string($a = $name-field.value, v = $VALUE)
+$on-input$: $validate_and_set($a = $name-field, v = $VALUE)
 
 
 -- ftd.text-input:
 placeholder: your email
-$on-input$: $ftd.set-string($a = $email-field.value, v = $VALUE)
+$on-input$: $validate_and_set($a = $email-field, v = $VALUE)
 value: $email-field.value ;; the default value we're showing to the user
 border-width.px: 1
 padding.px: 4
@@ -55,3 +55,10 @@ ftd.string-field email:
 js: $assets.files.index.js
 
 validate(name, email)
+
+-- void validate_and_set(a, v):
+ftd.string-field $a:
+string v:
+js: $assets.files.index.js
+
+validateAndSet(a, v)

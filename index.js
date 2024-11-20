@@ -19,15 +19,36 @@ function validate(name, email) {
     const nameVal = name.get("value").get();
     const emailVal = email.get("value").get();
 
-    if (nameVal === "") {
-        name.set("error", "Name is required");
-    }
+    validateEmpty(name, nameVal);
+    validateEmpty(email, emailVal);
 
-    if (emailVal === "") {
-        email.set("error", "Email is required");
-    }
+    validateEmail(email, emailVal);
+}
 
-    if (!emailVal.includes("@")) {
-        email.set("error", "Email must contain '@'");
+function validateAndSet(field, value) {
+    const key = field.get("name").get();
+
+    field.set("error", "");
+    field.set("value", value);
+
+    switch (key) {
+        case "name": { validateEmpty(field, value) } break;
+        case "email": {
+            validateEmail(field, value);
+            validateEmpty(field, value);
+        } break;
+        default: { console.error("Invalid field passed"); };
+    }
+}
+
+function validateEmpty(field, value) {
+    if (value === "") {
+        field.set("error", `${field.get("name").get()} is required`);
+    }
+}
+
+function validateEmail(field, value) {
+    if (!value.includes("@")) {
+        field.set("error", "Email must contain '@'");
     }
 }
